@@ -5,6 +5,29 @@ mod product;
 use ui::terminal;
 use product::Product;
 
+enum MenuOption {
+    Exit = 0,
+    RegisterProduct = 1,
+    ListItems = 2,
+    SearchItem = 3,
+    AddStock = 4,
+    RemoveStock = 5,
+}
+
+impl MenuOption {
+    fn from_u8(value: u8) -> Option<MenuOption> {
+        match value {
+            0 => Some(MenuOption::Exit),
+            1 => Some(MenuOption::RegisterProduct),
+            2 => Some(MenuOption::ListItems),
+            3 => Some(MenuOption::SearchItem),
+            4 => Some(MenuOption::AddStock),
+            5 => Some(MenuOption::RemoveStock),
+            _ => None,
+        }
+    }
+}
+
 fn main() {
     loop {
         terminal::show_menu();
@@ -19,17 +42,17 @@ fn main() {
             }
         };
 
-        match option {
-            1 => register_product(),
-            2 => println!("Opção 2 selecionada: Listar Itens em Estoque"),
-            3 => println!("Opção 3 selecionada: Buscar Item Existente"),
-            4 => println!("Opção 4 selecionada: Dar Entrada no Item"),
-            5 => println!("Opção 5 selecionada: Dar Saída no Item"),
-            0 => {
+        match MenuOption::from_u8(option) {
+            Some(MenuOption::RegisterProduct) => register_product(),
+            Some(MenuOption::ListItems) => println!("Opção 2 selecionada: Listar Itens em Estoque"),
+            Some(MenuOption::SearchItem) => println!("Opção 3 selecionada: Buscar Item Existente"),
+            Some(MenuOption::AddStock) => println!("Opção 4 selecionada: Dar Entrada no Item"),
+            Some(MenuOption::RemoveStock) => println!("Opção 5 selecionada: Dar Saída no Item"),
+            Some(MenuOption::Exit) => {
                 println!("Saindo do programa...");
                 break;
-            }
-            _ => println!("Opção inválida! Por favor, tente novamente."),
+            },
+            None => println!("Opção inválida. Por favor, tente novamente.")
         }   
     }
 }
